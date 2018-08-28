@@ -35,9 +35,9 @@ http://people.apache.org/repo/m2-snapshot-repository/
 http://people.apache.org/repo/m2-incubating-repository/
 
 6. Jar查询流程：
-1. 在 Maven 本地资源库中搜索，如果没有找到，进入第 2 步，否则退出。
-2. 在 Maven 中央存储库搜索，如果没有找到，进入第 3 步，否则退出。
-3. 在java.net Maven的远程存储库搜索，如果没有找到，提示错误信息，否则退出
+6.1. 在 Maven 本地资源库中搜索，如果没有找到，进入第 2 步，否则退出。
+6.2. 在 Maven 中央存储库搜索，如果没有找到，进入第 3 步，否则退出。
+6.3. 在java.net Maven的远程存储库搜索，如果没有找到，提示错误信息，否则退出
 
 
 7. maven私服上传jar包  
