@@ -49,8 +49,9 @@ max number of threads [2048] for user [elastic] is too low, increase to at least
 max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
 ```
 * 请增加配置项
-vim /etc/sysctl.conf
-vm.max_map_count=262144
+  *  vim /etc/sysctl.conf
+  *  vm.max_map_count=262144
+  *  sh sysctl -p
 ---
 ```
 如果出现配置外网ip还无法访问问题
