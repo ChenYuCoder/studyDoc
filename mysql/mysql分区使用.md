@@ -59,7 +59,7 @@ partition	ACTIVE	STORAGE ENGINE		GPL
 ```
 CREATE TABLE `test`.`test1`  (
   `id` int(10) NOT NULL,
-	`time` DATETIME NOT NULL,
+  `time` DATETIME NOT NULL,
   `name` varchar(50) NULL
 )PARTITION BY RANGE (YEAR(time))(
 PARTITION p1 VALUES LESS THAN (2019),
@@ -93,7 +93,7 @@ ALTER TABLE test1 DROP PARTITION p3;
 ```
 CREATE TABLE `test`.`test1_p1`  (
   `id` int(10) NOT NULL,
-      `time` DATETIME NOT NULL,
+  `time` DATETIME NOT NULL,
   `name` varchar(50) NULL
   );
 ```
