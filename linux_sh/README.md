@@ -1,5 +1,5 @@
 # Linux学习 
-http://www.runoob.com/linux/linux-file-attr-permission.html
+> 参考：http://www.runoob.com/linux/linux-file-attr-permission.html
 ## 操作命令
 * ls -l
 
@@ -173,5 +173,64 @@ n ：后面接数字，代表显示几行的意思
 -n ：不升级 /etc/mtab 情况下卸除。
 ```
 
-* tar -xf all.tar ：解压
+* 解压/压缩
+```
+1、*.tar 用 tar -xvf 解压
+2、*.gz 用 gzip -d或者gunzip 解压
+3、*.tar.gz和*.tgz 用 tar -xzf 解压
+4、*.bz2 用 bzip2 -d或者用bunzip2 解压
+5、*.tar.bz2用tar -xjf 解压
+6、*.Z 用 uncompress 解压
+7、*.tar.Z 用tar -xZf 解压
+8、*.rar 用 unrar e解压
+9、*.zip 用 unzip 解压
+```
 
+* linux时间管理
+```
+1. 查看时间：date
+2. 查看时区：date -R 或 date +%Z
+3. 设置时间：date -s "2018/8/8 10:00:00" 或 date -s 10:10:10
+4. 修改时区：cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+5. 修改时区：ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+6. 查看硬件时间：hwclock 或 clock
+7. 将硬件时间写入到系统时间：hwclock -s
+8. 将系统时间卸乳到硬件时间：hwclock -w
+9. 时间同步：yum install ntpdate
+```
+
+* nohup无log启动：nohup java -jar xxxx.jar >/dev/null 2>&1 &
+* 环境变量：/etc/profile
+* 查询目录下文件大小：
+```
+du -sh *
+du -ah --max-depth=1     a表示显示目录下所有的文件和文件夹（不含子目录），h表示以人类能看懂的方式，max-depth表示目录的深度。
+```
+* 已安装软件: rpm -qa | grep jdk
+* 安装软件: yum install jdk-8u131-linux-x64.rpm 
+* 切换java版本: update-alternatives --config java
+* 检索文件内容：cat dataservice.out | grep Cmt | tail -1000
+* 传输文件：scp jdk-8u121-linux-x64.rpm root@10.168.24.62:/
+* 查看端口占用：netstat -tunlp | grep 端口号：netstat -antp | grep 61617
+```
+-t (tcp) 仅显示tcp相关选项
+-u (udp)仅显示udp相关选项
+-n 拒绝显示别名，能显示数字的全部转化为数字
+-l 仅列出在Listen(监听)的服务状态
+-p 显示建立相关链接的程序名
+```
+* linux查看进程莫名消失
+```
+1. dmesg | egrep -i -B100 'killed process'
+2.1 egrep -i 'killed process' /var/log/messages 
+2.2 egrep -i -r 'killed process' /var/log
+3. journalctl -xb | egrep -i 'killed process'
+```
+* man 查询软件文档
+* iptables
+  * iptables -nL --line-number
+
+* ss -npl
+* ip link
+* tcpdump -i eth0 -nv tcp dst port 21985
+* jmap -histo:live pid > 21840.log
