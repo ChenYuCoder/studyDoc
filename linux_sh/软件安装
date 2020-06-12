@@ -1,0 +1,92 @@
+## 源码
+
+* 绝大多数开源软件都是直接以源代码形式发布
+* 源代码一般会被打包为tar.gz的归档压缩文件
+* 程序源代码需要编译成为二进制形式之后才能够运行使用
+* 源代码基本编译流程： 
+  * 1 ./configure 检查编译环境、相关库文件以及配置参数并生成makefile
+  * 2 make 对源代码进行编译，生成可执行文件
+  * 3 make install 将生成的可执行文件安装到当前计算机中
+* 源代码形式的软件使用起来较为麻烦，但是兼容性及可控性较好（可以针对应用场景做小修改）
+* 开源软件一般都会大量使用其他开源软件的功能，所以开源软件会有大量的依赖关系（使用某软* 件需要先安装其依赖的软件）
+
+
+## RPM安装
+
+* 源代码形式缺点：操作复杂、编译时间较长、极容易出错
+* 源代码形式优点：适用所有系统、可定制
+* 为了方便使用，开发了RPM（redhat Package Manager）
+* RPM通过将源代码基于特定平台系统编译为可执行文件，并保存依赖关系，来简化开源软件的安装管理
+  * RPM设计目标如下： 
+  * 适用简单；
+  * 使用单一软件包格式文件发布（.rpm文件）；
+  * 可升级；
+  * 追踪软件依赖关系；
+  * 基本信息查询；
+  * 软件验证功能；
+  * 支持多平台（针对不同的平台会发布不同的.rpm文件）。
+* RPM软件包常用命名规范：linuxcast-1.2.0-30.el6.i686.rpm （软件名-版本号.操作系统.32/64位.rpm）
+* RPM基本命令： 
+  * 安装软件 rpm -i software.rpm （i，install）
+  * 卸载软件 rpm -e software
+  * 升级形式安装 rpm -U software-new
+  * rpm 支持http、ftp协议安装软件，例如 rpm -ivh http://xxx/software.rpm
+  * 可以加入参数：-v 显示详细信息；-h显示进度条
+* RPM查询 
+  * RPM会保存软件相关的信息，可以通过以下命令查询：
+  * rpm -qa 列出所有安装的rpm软件
+  * rpm -qf filename 查询目标文件所属那个rpm包
+  * rqm -qi packagename 查询指定已安装rpm软件的信息
+  * rpm -ql packagename 查询指定已安装rpm软件包含的文件
+  * rpm -qip software.rpm 查询rpm文件的信息（安装前）
+  * rpm -qlp software.rpm 查询rpm文件包含的文件
+* RPM验证 
+  * 软件在传输过程中可能会被恶意修改，所以为了安全起见现在操作系统都加入了对软件的验证功能
+  * 验证一般使用非对称加密算法，所以需要一个秘钥
+  * 导入秘钥： rpm –import RPM-GPG-KEY-CentOS-6
+  * 验证rpm文件：rpm -K software.rpm
+  * 验证已安装的软件：rpm -V software
+
+
+## YUM安装
+
+* RPM软件缺点：仍然需要手工解决软件包依赖关系的问题。使用YUM可以解决这个问题。
+* YUM（Yellowdog Updater，Modified）是一个管理RPM的前端程序，主要目的是自动解决RPM的依赖关系问题的。其特点如下： 
+  * 自动解决依赖关系；
+  * 可以对RPM进行分组，并基于组进行安装操作；
+  * 引入仓库概念，支持多个仓库；
+  * 配置简单。
+* YUM引入了仓库（repo）的概念，仓库用来存放所有现有rpm软件包，当使用yum安装一个rpm软件时，如果存在依赖关系，yum会自动在仓库中查找其依赖软件并安装，如果仓库中没有所依赖的软件，则无法安装；
+* 仓库可以是本地的，也可以通过HTTP、FTP或NFS形式使用集中的、统一的网络仓库；
+* YUM仓库配置：
+* * yum 使用仓库保存管理rpm软件包，仓库的配置文件保存在/etc/yum.repos.d/目录下，格式如下： 
+  * [LinuxCast] 
+  * name = This is LinuxCast.net rpm soft repo 
+  * baseurl = http://www.xxx 
+  * enabled = 1 
+  * gpgcheck = 1
+  * 仓库可以使用file、http、ftp、nfs方式
+  * yum配置文件必须以.repo结尾
+  * 一个配置文件内可以保存多个仓库的配置信息
+  * /etc/yum.repos.d/目录下可以存在多个配置文件
+* YUM基本命令： 
+  * yum install software-name 安装指定软件
+  * yum remove software-name 删除指定软件
+  * yum update software-name 升级指定软件
+* YUM查询命令： 
+  * yum search keyword 搜索（在yum仓库中搜索名字包含给定关键字的软件）
+  * yum list（all/installed/recent/updates） 列出全部、安装的、最近的、软件更新
+  * yum info packagename 显示指定软件的信息
+  * yum whatprovides filename 查询哪些rpm软件包含文件名为filename的文件
+* 手工创建YUM仓库： 
+  * 1 将所有rpm文件拷贝到一个文件夹中
+  * 2 通过rpm命令手动安装createrepo软件
+  * 3 运行命令 createrepo -v/rpm文件的路径
+  * 4 如果有分组信息，则在运行命令时使用-g参数指定分组文件 
+  * createrepo -g/tmp/*comps.xml /rpm-directory 
+  * Centos/RHEL的分组信息保存在光盘repodata目录下，文件名以compas.xml结尾的xml文件
+  * 创建好之后本机可以通过file方式直接使用，如果需要作为对外的YUM仓库服务器，可以通过HTTP、FTP或NFS协议共享出去。
+* YUM CACHE 
+  * YUM 为了提高速度会缓存很多信息，但有时间缓存会造成一些故障，可以通过以下命令来清除缓存： 
+  * yum clean all
+  * 每次运行安装或查询类命令会重建yum缓存。
