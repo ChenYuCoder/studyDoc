@@ -1,0 +1,17 @@
+## 微信小程序-支付-验证签名失败
+
+#### 文档：
+
+* 服务端：https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1
+* 小程序：https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=7_7&index=5
+* 二次签名在线工具:https://pay.weixin.qq.com/wiki/doc/api/micropay.php?chapter=20_1
+
+### 常见问题：
+
+* 字段，驼峰
+* appId与key使用值不正确
+* 方法：在官方demo中均提供
+  * timeStamp：WxPayUtil.getCurrentTimestamp()；
+  * nonceStr：WxPayUtil.generateNonceStr()；
+  * sign：WxPayUtil.generateSignature(signMap, key)；
+* 预支付时签名方式与二次签名必须一致，预支付默认为HMACSHA256
